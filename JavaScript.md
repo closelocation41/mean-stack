@@ -1,3 +1,11 @@
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
 # JavaScript Interview Questions
 
 A collection of JavaScript interview questions and answers categorized by difficulty.
