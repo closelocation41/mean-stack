@@ -1,3 +1,12 @@
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
+
 Here’s a collection of **100 TypeScript interview questions** categorized into **basic** and **advanced** sections, complete with brief answers and examples.
 
 ### **Basic TypeScript Interview Questions**
