@@ -1,3 +1,13 @@
+
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
+  
 Here is a comprehensive list of 100+ Angular interview questions and answers with code examples:
 
 ### 1. **What is Angular?**
