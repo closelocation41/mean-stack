@@ -18,6 +18,32 @@ Here are some suggestions for headings, descriptions, and meta titles for interv
 
 
 
+That's impressive, Sandeep! It sounds like you have a strong background in full-stack development with a focus on cutting-edge technologies and automation tools. Here's a refined summary of your professional profile:
+
+---
+
+### **Sandeep Nath - Lead Engineer | Full-Stack Developer**  
+I am a professional software developer with **6 years of experience** in full-stack development, specializing in:  
+
+#### **Backend**  
+- **Node.js** (4 years), Express.js, PHP  
+- Expertise in building microservices and automation tools  
+ 
+#### **Frontend**  
+- Angular (4+ years), HTML, CSS, TypeScript  
+
+#### **Databases**  
+- MongoDB, MySQL, PostgreSQL  
+
+#### **Cloud Infrastructure & Automation**  
+- AWS, Docker  
+- Camunda BPM for business process automation  
+
+### **Professional Highlights**  
+- **Current Role:** Lead Engineer at HCL for the past 3 years.  
+- **Project Spotlight:**  
+
+
 
 
 ---
