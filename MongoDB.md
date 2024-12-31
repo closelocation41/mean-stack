@@ -1,3 +1,11 @@
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
 Here’s a list of 100+ MongoDB interview questions and answers with examples that could help in preparation for your interviews. I'll split them into sections, each focused on different aspects of MongoDB.
 
 ### 1. **Basics of MongoDB**
