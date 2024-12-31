@@ -1,3 +1,13 @@
+
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
+
 Here is a list of 100+ common MySQL interview questions and answers:
 
 ### Basic MySQL Interview Questions:
