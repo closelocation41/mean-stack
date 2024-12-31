@@ -1,3 +1,12 @@
+## Technology Docs
+
+- [Angular](Angular.md)  
+- [MongoDB](MongoDB.md)  
+- [MySQL](Mysql.md)  
+- [Node.js](Node-Js.md)  
+- [TypeScript](TypeScript.md)  
+- [JavaScript](JavaScript.md)
+
 Here is a list of 100+ interview questions with answers and examples for Node.js. These questions cover various topics like basics, advanced concepts, best practices, and frameworks.
 
 ### **Basic Node.js Interview Questions**
