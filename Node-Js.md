@@ -1657,3 +1657,1988 @@ Here are even more advanced Node.js interview questions with explanations and co
       npm install lodash --save       # Adds to dependencies
       npm install mocha --save-dev    # Adds to devDependencies
       ```
+
+Here are some examples of JavaScript and Node.js logic and programs that showcase fundamental to advanced concepts. These examples are practical and can be extended to real-world applications.
+
+---
+
+### 1. **Basic Logic: Palindrome Check**
+```javascript
+function isPalindrome(str) {
+    const reversed = str.split('').reverse().join('');
+    return str === reversed;
+}
+
+console.log(isPalindrome("radar")); // true
+console.log(isPalindrome("hello")); // false
+```
+
+---
+
+### 2. **Node.js HTTP Server**
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello, World!');
+});
+
+server.listen(3000, () => {
+    console.log('Server running at http://localhost:3000/');
+});
+```
+
+---
+
+### 3. **CRUD Operations with Node.js File System (fs)**
+```javascript
+const fs = require('fs');
+
+// Create
+fs.writeFileSync('example.txt', 'This is an example file');
+
+// Read
+const content = fs.readFileSync('example.txt', 'utf-8');
+console.log(content);
+
+// Update
+fs.appendFileSync('example.txt', '\nAppended text');
+
+// Delete
+fs.unlinkSync('example.txt');
+console.log('File deleted');
+```
+
+---
+
+### 4. **Asynchronous Logic: Fetch Data Using Promises**
+```javascript
+const fetch = require('node-fetch');
+
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+fetchData('https://jsonplaceholder.typicode.com/posts/1');
+```
+
+---
+
+### 5. **REST API with Express**
+```javascript
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+let books = [
+    { id: 1, title: 'Book 1' },
+    { id: 2, title: 'Book 2' },
+];
+
+// Get all books
+app.get('/books', (req, res) => {
+    res.json(books);
+});
+
+// Add a book
+app.post('/books', (req, res) => {
+    const book = req.body;
+    books.push(book);
+    res.status(201).json(book);
+});
+
+// Update a book
+app.put('/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const updatedBook = req.body;
+    books = books.map(book => (book.id === id ? updatedBook : book));
+    res.json(updatedBook);
+});
+
+// Delete a book
+app.delete('/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    books = books.filter(book => book.id !== id);
+    res.status(204).send();
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 6. **JWT Authentication in Node.js**
+```javascript
+const jwt = require('jsonwebtoken');
+
+const secretKey = 'mysecretkey';
+
+// Generate Token
+function generateToken(user) {
+    return jwt.sign(user, secretKey, { expiresIn: '1h' });
+}
+
+// Verify Token
+function verifyToken(token) {
+    try {
+        const decoded = jwt.verify(token, secretKey);
+        console.log('Verified:', decoded);
+    } catch (err) {
+        console.error('Invalid token');
+    }
+}
+
+// Example Usage
+const user = { id: 1, username: 'sandeep' };
+const token = generateToken(user);
+console.log('Token:', token);
+
+verifyToken(token);
+```
+
+---
+
+### 7. **Event Emitter Example**
+```javascript
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter {}
+
+const myEmitter = new MyEmitter();
+
+myEmitter.on('event', () => {
+    console.log('An event occurred!');
+});
+
+myEmitter.emit('event');
+```
+
+---
+
+### 8. **Read and Write JSON in Node.js**
+```javascript
+const fs = require('fs');
+
+const data = {
+    name: "Sandeep Nath",
+    skills: ["Node.js", "TypeScript", "AWS"],
+};
+
+// Write JSON to file
+fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+
+// Read JSON from file
+const fileContent = fs.readFileSync('data.json', 'utf-8');
+const parsedData = JSON.parse(fileContent);
+console.log(parsedData);
+```
+
+---
+
+### 9. **Real-Time Chat with WebSocket**
+```javascript
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', ws => {
+    ws.on('message', message => {
+        console.log(`Received: ${message}`);
+        ws.send(`Echo: ${message}`);
+    });
+
+    ws.send('Welcome to WebSocket server!');
+});
+```
+
+---
+
+### 10. **Node.js with MongoDB (CRUD Example)**
+```javascript
+const { MongoClient } = require('mongodb');
+
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+const dbName = 'testDB';
+
+async function run() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+
+        const db = client.db(dbName);
+        const collection = db.collection('documents');
+
+        // Create
+        await collection.insertOne({ name: 'Document 1', value: 100 });
+
+        // Read
+        const docs = await collection.find().toArray();
+        console.log('Documents:', docs);
+
+        // Update
+        await collection.updateOne({ name: 'Document 1' }, { $set: { value: 200 } });
+
+        // Delete
+        await collection.deleteOne({ name: 'Document 1' });
+        console.log('Document deleted');
+    } finally {
+        await client.close();
+    }
+}
+
+run().catch(console.dir);
+```
+
+Here are more advanced JavaScript and Node.js examples that showcase different concepts and patterns.
+
+---
+
+### 11. **File Upload with Multer in Express**
+```javascript
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const app = express();
+
+// Set up storage engine for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// POST route to handle file upload
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded successfully!');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 12. **MongoDB Aggregation Pipeline**
+```javascript
+const { MongoClient } = require('mongodb');
+
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+const dbName = 'testDB';
+
+async function run() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+
+        const db = client.db(dbName);
+        const collection = db.collection('orders');
+
+        // Example aggregation pipeline
+        const results = await collection.aggregate([
+            { $match: { status: 'shipped' } },
+            { $group: { _id: '$customerId', totalSpent: { $sum: '$amount' } } },
+            { $sort: { totalSpent: -1 } }
+        ]).toArray();
+
+        console.log('Aggregated Results:', results);
+    } finally {
+        await client.close();
+    }
+}
+
+run().catch(console.dir);
+```
+
+---
+
+### 13. **Debounce Function Example**
+A debounce function is useful for limiting the rate at which a function is invoked.
+```javascript
+function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), delay);
+    };
+}
+
+// Example usage
+const handleSearch = debounce(function (event) {
+    console.log('Searching for:', event.target.value);
+}, 500);
+
+document.getElementById('searchInput').addEventListener('input', handleSearch);
+```
+
+---
+
+### 14. **Node.js Worker Threads for Parallel Processing**
+Worker threads allow you to perform multi-threaded operations in Node.js.
+```javascript
+const { Worker, isMainThread, parentPort } = require('worker_threads');
+
+if (isMainThread) {
+    const worker = new Worker(__filename); // Launch worker
+
+    worker.on('message', (message) => {
+        console.log('Received from worker:', message);
+    });
+
+    worker.postMessage('Hello, worker!');
+} else {
+    parentPort.on('message', (message) => {
+        console.log('Received from main thread:', message);
+        parentPort.postMessage('Worker says hi!');
+    });
+}
+```
+
+---
+
+### 15. **Using Redis for Caching in Node.js**
+```javascript
+const redis = require('redis');
+const client = redis.createClient();
+
+client.on('error', (err) => {
+    console.log('Redis error:', err);
+});
+
+// Set a key-value pair
+client.set('name', 'Sandeep', (err, reply) => {
+    if (err) {
+        console.log('Error setting value:', err);
+    } else {
+        console.log('Set value:', reply);
+    }
+});
+
+// Get the value
+client.get('name', (err, reply) => {
+    if (err) {
+        console.log('Error getting value:', err);
+    } else {
+        console.log('Retrieved value:', reply); // "Sandeep"
+    }
+});
+```
+
+---
+
+### 16. **Rate Limiting with Express**
+A simple rate limiter using an in-memory store.
+```javascript
+const express = require('express');
+const app = express();
+
+const RATE_LIMIT = 5; // Allow 5 requests per minute
+const requestCounts = {};
+
+app.use((req, res, next) => {
+    const ip = req.ip;
+    const currentTime = Date.now();
+    const timeWindow = 60000; // 1 minute
+
+    if (!requestCounts[ip]) {
+        requestCounts[ip] = [];
+    }
+
+    // Remove outdated timestamps
+    requestCounts[ip] = requestCounts[ip].filter(timestamp => currentTime - timestamp < timeWindow);
+
+    if (requestCounts[ip].length >= RATE_LIMIT) {
+        return res.status(429).send('Too many requests. Please try again later.');
+    }
+
+    // Log the current timestamp
+    requestCounts[ip].push(currentTime);
+    next();
+});
+
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 17. **Send Email Using Nodemailer in Node.js**
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password'
+    }
+});
+
+const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: 'recipient-email@example.com',
+    subject: 'Test Email from Node.js',
+    text: 'This is a test email sent from Node.js using Nodemailer!'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        console.log('Error sending email:', error);
+    } else {
+        console.log('Email sent:', info.response);
+    }
+});
+```
+
+---
+
+### 18. **Task Scheduler using `node-cron`**
+Use `node-cron` to run tasks at specified intervals.
+```javascript
+const cron = require('node-cron');
+
+// Run task every minute
+cron.schedule('* * * * *', () => {
+    console.log('Task running every minute');
+});
+
+// Run task every day at midnight
+cron.schedule('0 0 * * *', () => {
+    console.log('Task running at midnight');
+});
+```
+
+---
+
+### 19. **GraphQL Server with Apollo Server**
+```javascript
+const { ApolloServer, gql } = require('apollo-server');
+
+// GraphQL schema
+const typeDefs = gql`
+    type Query {
+        hello: String
+    }
+`;
+
+// Resolver functions
+const resolvers = {
+    Query: {
+        hello: () => 'Hello, world!',
+    },
+};
+
+// Apollo Server setup
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+    console.log(`Server ready at ${url}`);
+});
+```
+
+---
+
+### 20. **Custom Middleware in Express**
+```javascript
+const express = require('express');
+const app = express();
+
+// Custom middleware to log request details
+app.use((req, res, next) => {
+    console.log(`Method: ${req.method}, URL: ${req.url}`);
+    next(); // Pass to the next middleware or route handler
+});
+
+app.get('/', (req, res) => {
+    res.send('Hello, Express!');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+Here are additional advanced JavaScript and Node.js examples that cover various use cases and concepts:
+
+---
+
+### 21. **Building a Simple Chat Server with Socket.io**
+A real-time chat server using Socket.io in Node.js.
+```javascript
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+server.listen(3000, () => {
+    console.log('Chat server running on http://localhost:3000');
+});
+```
+
+---
+
+### 22. **Using Sequelize ORM with MySQL**
+Performing CRUD operations with Sequelize, a Node.js ORM for SQL databases.
+```javascript
+const { Sequelize, DataTypes } = require('sequelize');
+
+// Connect to MySQL database
+const sequelize = new Sequelize('mysql://root:password@localhost:3306/testdb');
+
+// Define a User model
+const User = sequelize.define('User', {
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
+    }
+});
+
+async function run() {
+    // Sync the database
+    await sequelize.sync();
+
+    // Create a new user
+    const user = await User.create({ name: 'John Doe', email: 'john@example.com' });
+
+    // Retrieve all users
+    const users = await User.findAll();
+    console.log('All users:', users);
+
+    // Update a user
+    await user.update({ name: 'John Smith' });
+
+    // Delete a user
+    await user.destroy();
+}
+
+run().catch(console.error);
+```
+
+---
+
+### 23. **JWT Authentication with Refresh Token**
+Implementing JWT authentication with access and refresh tokens for session management.
+```javascript
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+const secretKey = 'mysecretkey';
+const refreshTokens = []; // In-memory store (in production, use a database)
+
+// Generate Access and Refresh Tokens
+function generateTokens(user) {
+    const accessToken = jwt.sign(user, secretKey, { expiresIn: '15m' });
+    const refreshToken = jwt.sign(user, secretKey, { expiresIn: '7d' });
+    return { accessToken, refreshToken };
+}
+
+// Token Refresh Endpoint
+app.post('/token', (req, res) => {
+    const refreshToken = req.body.token;
+    if (!refreshToken || !refreshTokens.includes(refreshToken)) {
+        return res.sendStatus(403);
+    }
+
+    jwt.verify(refreshToken, secretKey, (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+        const newTokens = generateTokens(user);
+        res.json(newTokens);
+    });
+});
+
+// Login Endpoint
+app.post('/login', (req, res) => {
+    const user = { username: req.body.username }; // Simplified for demo
+    const { accessToken, refreshToken } = generateTokens(user);
+    refreshTokens.push(refreshToken);
+    res.json({ accessToken, refreshToken });
+});
+
+// Protected Route
+app.get('/protected', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+        res.json({ message: 'Protected data', user });
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 24. **Implementing Rate Limiting with Redis**
+Using Redis to implement rate limiting in a Node.js app.
+```javascript
+const express = require('express');
+const redis = require('redis');
+const app = express();
+const client = redis.createClient();
+const rateLimitWindow = 60; // 60 seconds
+const rateLimitMax = 5; // Max 5 requests
+
+client.on('error', (err) => {
+    console.log('Error:', err);
+});
+
+// Rate Limiting Middleware
+app.use((req, res, next) => {
+    const ip = req.ip;
+    const currentTime = Math.floor(Date.now() / 1000); // Current Unix timestamp
+    const key = `rate_limit:${ip}:${currentTime}`;
+
+    client.incr(key, (err, reply) => {
+        if (err) return res.status(500).send('Server Error');
+
+        if (reply > rateLimitMax) {
+            return res.status(429).send('Rate limit exceeded. Please try again later.');
+        }
+        client.expire(key, rateLimitWindow); // Set expiration for key
+        next();
+    });
+});
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the rate-limited API!');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 25. **Sending SMS with Twilio API**
+Send an SMS using Twilio API in Node.js.
+```javascript
+const twilio = require('twilio');
+
+// Twilio credentials
+const accountSid = 'your_account_sid';
+const authToken = 'your_auth_token';
+const client = twilio(accountSid, authToken);
+
+client.messages.create({
+    body: 'Hello from Node.js!',
+    from: '+1234567890', // Your Twilio number
+    to: '+0987654321' // Recipient's number
+})
+.then(message => console.log('Message SID:', message.sid))
+.catch(error => console.error('Error:', error));
+```
+
+---
+
+### 26. **Building a Simple Todo List API with Express and MongoDB**
+```javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/todolist', { useNewUrlParser: true, useUnifiedTopology: true });
+
+// Define Todo schema and model
+const Todo = mongoose.model('Todo', {
+    task: String,
+    completed: { type: Boolean, default: false }
+});
+
+// Routes
+app.get('/todos', async (req, res) => {
+    const todos = await Todo.find();
+    res.json(todos);
+});
+
+app.post('/todos', async (req, res) => {
+    const newTodo = new Todo({
+        task: req.body.task,
+    });
+    await newTodo.save();
+    res.status(201).json(newTodo);
+});
+
+app.put('/todos/:id', async (req, res) => {
+    const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(todo);
+});
+
+app.delete('/todos/:id', async (req, res) => {
+    await Todo.findByIdAndDelete(req.params.id);
+    res.status(204).send();
+});
+
+app.listen(3000, () => {
+    console.log('Todo app running on http://localhost:3000');
+});
+```
+
+---
+
+### 27. **Using Passport.js for Local Authentication**
+Implementing local strategy authentication with Passport.js.
+```javascript
+const express = require('express');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+
+// Simple in-memory user store
+const users = [{ id: 1, username: 'sandeep', password: 'password123' }];
+
+passport.use(new LocalStrategy((username, password, done) => {
+    const user = users.find(u => u.username === username);
+    if (!user || user.password !== password) {
+        return done(null, false, { message: 'Invalid credentials' });
+    }
+    return done(null, user);
+}));
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => done(null, users.find(u => u.id === id)));
+
+app.use(passport.initialize());
+
+// Login endpoint
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
+}));
+
+app.get('/dashboard', (req, res) => {
+    res.send('Welcome to the dashboard');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 28. **Using the Node.js `vm` Module to Execute Code**
+The `vm` module allows you to compile and execute JavaScript code within Node.js.
+```javascript
+const vm = require('vm');
+
+const context = { x: 10, y: 20 };
+const code = 'x + y';
+
+const result = vm.runInNewContext(code, context);
+console.log('Result:', result); // 30
+```
+
+---
+
+### 29. **Request Validation with Joi**
+Using Joi to validate request bodies in an Express app.
+```javascript
+const express = require('express');
+const Joi = require('joi');
+const app = express();
+app.use(express.json());
+
+// Joi schema for validating input
+const schema = Joi.object({
+    username: Joi.string().min(3).required(),
+    email: Joi.string().email().required()
+});
+
+app.post('/user', (req, res) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+    res.send('User data is valid');
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 30. **File Compression with `zlib`**
+Compressing files using Node.js `zlib` module.
+```javascript
+const fs = require('fs');
+const zlib = require('zlib');
+
+// Compress file
+const gzip = zlib.createGzip();
+const input = fs.createReadStream('input.txt');
+const output = fs.createWriteStream('input.txt.gz');
+
+input.pipe(gzip).pipe(output);
+
+// Decompress file
+const gunzip = zlib.createGunzip();
+const inputGzip = fs.createReadStream('input.txt.gz');
+const outputTxt = fs.createWriteStream('output.txt');
+
+inputGzip.pipe(gunzip).pipe(outputTxt);
+```
+
+---
+Here are additional advanced JavaScript and Node.js examples to continue enhancing your skills in various domains:
+
+---
+
+### 31. **Sending Push Notifications Using Firebase Cloud Messaging (FCM)**
+Using Firebase Cloud Messaging (FCM) to send push notifications.
+```javascript
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccountKey.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+const registrationToken = 'recipient_fcm_token';
+
+const message = {
+    notification: {
+        title: 'Hello!',
+        body: 'This is a push notification from Firebase.'
+    },
+    token: registrationToken
+};
+
+admin.messaging().send(message)
+    .then((response) => {
+        console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+        console.log('Error sending message:', error);
+    });
+```
+
+---
+
+### 32. **Implementing Web Scraping with `cheerio`**
+A simple web scraping example using `cheerio` and `axios` to extract data from a webpage.
+```javascript
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+async function scrapeData() {
+    const { data } = await axios.get('https://example.com');
+    const $ = cheerio.load(data);
+    
+    const titles = [];
+    $('h1').each((index, element) => {
+        titles.push($(element).text());
+    });
+
+    console.log('Extracted Titles:', titles);
+}
+
+scrapeData();
+```
+
+---
+
+### 33. **Redis Caching for Database Results**
+Using Redis to cache database results to improve performance.
+```javascript
+const redis = require('redis');
+const mongoose = require('mongoose');
+const client = redis.createClient();
+
+mongoose.connect('mongodb://localhost:27017/testdb', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const Product = mongoose.model('Product', {
+    name: String,
+    price: Number
+});
+
+async function getProduct(productId) {
+    const cacheKey = `product:${productId}`;
+
+    // Check if data is available in Redis cache
+    client.get(cacheKey, async (err, cachedData) => {
+        if (cachedData) {
+            console.log('Data from cache:', JSON.parse(cachedData));
+        } else {
+            const product = await Product.findById(productId);
+            if (product) {
+                client.setex(cacheKey, 3600, JSON.stringify(product)); // Cache data for 1 hour
+                console.log('Data from database:', product);
+            } else {
+                console.log('Product not found');
+            }
+        }
+    });
+}
+
+getProduct('60d4e6a7a0d90c001c45e5f3');
+```
+
+---
+
+### 34. **Using `cluster` for Multi-Core Node.js Applications**
+Using Node.js `cluster` module to utilize multiple CPU cores for scaling your application.
+```javascript
+const cluster = require('cluster');
+const http = require('http');
+const os = require('os');
+
+if (cluster.isMaster) {
+    const numCPUs = os.cpus().length;
+
+    // Fork workers
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died`);
+    });
+} else {
+    http.createServer((req, res) => {
+        res.writeHead(200);
+        res.end('Hello, Node.js Cluster!');
+    }).listen(8000);
+}
+```
+
+---
+
+### 35. **Handling File Upload with Amazon S3**
+Using AWS SDK to upload files to Amazon S3.
+```javascript
+const AWS = require('aws-sdk');
+const fs = require('fs');
+
+const s3 = new AWS.S3({
+    accessKeyId: 'your-access-key-id',
+    secretAccessKey: 'your-secret-access-key',
+    region: 'us-east-1'
+});
+
+const uploadFile = (filePath) => {
+    const fileContent = fs.readFileSync(filePath);
+
+    const params = {
+        Bucket: 'your-bucket-name',
+        Key: 'your-file-key',
+        Body: fileContent
+    };
+
+    s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            console.log('File uploaded successfully:', data.Location);
+        }
+    });
+};
+
+uploadFile('./local-file.txt');
+```
+
+---
+
+### 36. **Using `express-session` for Session Management**
+Implementing session management in an Express app using `express-session`.
+```javascript
+const express = require('express');
+const session = require('express-session');
+const app = express();
+
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }  // Set secure to true if using HTTPS
+}));
+
+app.get('/', (req, res) => {
+    if (req.session.views) {
+        req.session.views++;
+        res.send(`<h1>You've visited this page ${req.session.views} times</h1>`);
+    } else {
+        req.session.views = 1;
+        res.send('<h1>Welcome to the session demo. Refresh to count visits.</h1>');
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Session app running on http://localhost:3000');
+});
+```
+
+---
+
+### 37. **API Documentation with Swagger**
+Generating API documentation with Swagger in an Express application.
+```javascript
+const express = require('express');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const app = express();
+
+// Swagger configuration
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: 'API Documentation',
+            description: 'Test API documentation',
+            version: '1.0.0'
+        }
+    },
+    apis: ['./routes/*.js']
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.listen(3000, () => {
+    console.log('Swagger UI running on http://localhost:3000/api-docs');
+});
+```
+
+---
+
+### 38. **Handling Concurrent Requests with `async`/`await`**
+Handling multiple asynchronous operations using `async`/`await`.
+```javascript
+const axios = require('axios');
+
+async function fetchData() {
+    try {
+        const [response1, response2] = await Promise.all([
+            axios.get('https://jsonplaceholder.typicode.com/posts/1'),
+            axios.get('https://jsonplaceholder.typicode.com/posts/2')
+        ]);
+
+        console.log('Data from first request:', response1.data);
+        console.log('Data from second request:', response2.data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+fetchData();
+```
+
+---
+
+### 39. **Implementing WebSockets with `ws`**
+Setting up a WebSocket server using the `ws` library in Node.js.
+```javascript
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    console.log('A new client connected');
+    
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+    });
+
+    ws.send('Hello from WebSocket server!');
+});
+
+console.log('WebSocket server running on ws://localhost:8080');
+```
+
+---
+
+### 40. **Using `async_hooks` to Track Asynchronous Events**
+Tracking asynchronous operations using Node.js `async_hooks`.
+```javascript
+const async_hooks = require('async_hooks');
+const fs = require('fs');
+
+const hook = async_hooks.createHook({
+    init(asyncId, type, triggerAsyncId, resource) {
+        fs.writeSync(1, `Async operation ${type} with ID ${asyncId}\n`);
+    },
+    before(asyncId) {
+        fs.writeSync(1, `Before async operation with ID ${asyncId}\n`);
+    },
+    after(asyncId) {
+        fs.writeSync(1, `After async operation with ID ${asyncId}\n`);
+    },
+    destroy(asyncId) {
+        fs.writeSync(1, `Async operation with ID ${asyncId} destroyed\n`);
+    }
+});
+
+hook.enable();
+
+// Example async operation to trigger hooks
+setTimeout(() => {
+    console.log('Async operation finished');
+}, 1000);
+```
+
+---
+
+### 41. **Proxy Server with `http-proxy-middleware`**
+Creating a simple proxy server using `http-proxy-middleware` in an Express app.
+```javascript
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const app = express();
+
+app.use('/api', createProxyMiddleware({ target: 'http://example.com', changeOrigin: true }));
+
+app.listen(3000, () => {
+    console.log('Proxy server running on http://localhost:3000');
+});
+```
+
+---
+
+### 42. **Sending Emails with SendGrid**
+Sending emails using SendGrid's API in Node.js.
+```javascript
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('your-sendgrid-api-key');
+
+const msg = {
+    to: 'recipient@example.com',
+    from: 'sender@example.com',
+    subject: 'Hello from Node.js',
+    text: 'This is a test email sent using SendGrid.',
+    html: '<strong>This is a test email sent using SendGrid.</strong>',
+};
+
+sgMail.send(msg)
+    .then(() => {
+        console.log('Email sent');
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+```
+
+---
+Here are more advanced JavaScript and Node.js examples to help you dive deeper into various concepts and applications:
+
+---
+
+### 43. **Using `sharp` for Image Processing**
+`sharp` is a high-performance image processing library for Node.js, allowing you to resize, convert, and manipulate images.
+```javascript
+const sharp = require('sharp');
+
+sharp('input-image.jpg')
+    .resize(300, 200)
+    .toFile('output-image.jpg', (err, info) => {
+        if (err) {
+            console.error('Error processing image:', err);
+        } else {
+            console.log('Image processed successfully:', info);
+        }
+    });
+```
+
+---
+
+### 44. **Event-Driven Architecture with `EventEmitter`**
+Using the `EventEmitter` class to create custom events and listeners in Node.js.
+```javascript
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+
+// Event listener for 'order' event
+eventEmitter.on('order', (orderId) => {
+    console.log(`Order received: ${orderId}`);
+});
+
+// Triggering the 'order' event
+eventEmitter.emit('order', '12345');
+```
+
+---
+
+### 45. **Creating a Simple HTTP Server**
+Setting up a simple HTTP server using Node.js's built-in `http` module.
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello, World!\n');
+});
+
+server.listen(3000, () => {
+    console.log('Server running at http://localhost:3000');
+});
+```
+
+---
+
+### 46. **Job Queue with `bull` (Redis-based)**
+`bull` is a library for handling jobs and queues, using Redis as a backend.
+```javascript
+const Queue = require('bull');
+
+// Create a new queue
+const emailQueue = new Queue('emailQueue', 'redis://127.0.0.1:6379');
+
+// Define a job processor
+emailQueue.process(async (job) => {
+    console.log('Sending email to:', job.data.email);
+    // Simulate email sending process
+    return new Promise((resolve) => setTimeout(resolve, 1000));
+});
+
+// Add a job to the queue
+emailQueue.add({ email: 'user@example.com' });
+
+// Handling job completion
+emailQueue.on('completed', (job, result) => {
+    console.log(`Job ${job.id} completed`);
+});
+```
+
+---
+
+### 47. **Caching HTTP Responses with `node-cache`**
+Using `node-cache` to cache HTTP responses in memory for fast access.
+```javascript
+const express = require('express');
+const NodeCache = require('node-cache');
+const app = express();
+const cache = new NodeCache();
+
+// Mock function to fetch data from a database
+function fetchData() {
+    return { name: 'John Doe', age: 30 };
+}
+
+// Route that uses caching
+app.get('/user', (req, res) => {
+    const cacheKey = 'user';
+
+    // Check if data is in cache
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+        return res.json(cachedData);
+    }
+
+    // If not cached, fetch data and store it in cache
+    const data = fetchData();
+    cache.set(cacheKey, data, 60); // Cache for 60 seconds
+    res.json(data);
+});
+
+app.listen(3000, () => {
+    console.log('Server running at http://localhost:3000');
+});
+```
+
+---
+
+### 48. **Web Scraping with Puppeteer (Headless Browser)**
+Using Puppeteer to scrape content from web pages by simulating a headless browser.
+```javascript
+const puppeteer = require('puppeteer');
+
+async function scrapeWebsite() {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    
+    await page.goto('https://example.com');
+    const title = await page.title();
+    
+    console.log('Page Title:', title);
+    
+    await browser.close();
+}
+
+scrapeWebsite();
+```
+
+---
+
+### 49. **Creating a REST API with Express and MongoDB**
+Building a REST API using Express and MongoDB with basic CRUD operations.
+```javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/api', { useNewUrlParser: true, useUnifiedTopology: true });
+
+// Define a simple model
+const Post = mongoose.model('Post', {
+    title: String,
+    content: String
+});
+
+// CRUD Endpoints
+
+// Create a new post
+app.post('/posts', async (req, res) => {
+    const post = new Post(req.body);
+    await post.save();
+    res.status(201).json(post);
+});
+
+// Get all posts
+app.get('/posts', async (req, res) => {
+    const posts = await Post.find();
+    res.json(posts);
+});
+
+// Get a single post by ID
+app.get('/posts/:id', async (req, res) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).send('Post not found');
+    res.json(post);
+});
+
+// Update a post
+app.put('/posts/:id', async (req, res) => {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!post) return res.status(404).send('Post not found');
+    res.json(post);
+});
+
+// Delete a post
+app.delete('/posts/:id', async (req, res) => {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (!post) return res.status(404).send('Post not found');
+    res.status(204).send();
+});
+
+app.listen(3000, () => {
+    console.log('API server running at http://localhost:3000');
+});
+```
+
+---
+
+### 50. **Implementing OAuth 2.0 Authentication**
+Using OAuth 2.0 for third-party authentication (e.g., Google).
+```javascript
+const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+const app = express();
+
+// Configure Passport.js with Google OAuth strategy
+passport.use(new GoogleStrategy({
+    clientID: 'your-google-client-id',
+    clientSecret: 'your-google-client-secret',
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+}, (accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+}));
+
+// Serialize user info
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
+
+// Express routes
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        res.send('You are logged in');
+    }
+);
+
+app.listen(3000, () => {
+    console.log('Server running at http://localhost:3000');
+});
+```
+
+---
+
+### 51. **Running Asynchronous Tasks in Parallel with `Promise.all`**
+Running multiple asynchronous tasks in parallel using `Promise.all`.
+```javascript
+const axios = require('axios');
+
+async function fetchMultipleUrls() {
+    const urls = [
+        'https://jsonplaceholder.typicode.com/posts/1',
+        'https://jsonplaceholder.typicode.com/posts/2',
+        'https://jsonplaceholder.typicode.com/posts/3'
+    ];
+
+    const responses = await Promise.all(urls.map(url => axios.get(url)));
+
+    responses.forEach(response => {
+        console.log(response.data);
+    });
+}
+
+fetchMultipleUrls();
+```
+
+---
+
+### 52. **Database Transactions with Sequelize**
+Performing a transaction using Sequelize ORM to ensure atomicity of operations.
+```javascript
+const { Sequelize, DataTypes, Op } = require('sequelize');
+const sequelize = new Sequelize('mysql://root:password@localhost:3306/testdb');
+
+// Define User model
+const User = sequelize.define('User', {
+    name: DataTypes.STRING,
+    balance: DataTypes.INTEGER
+});
+
+async function transferFunds(senderId, receiverId, amount) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        const sender = await User.findByPk(senderId, { transaction });
+        const receiver = await User.findByPk(receiverId, { transaction });
+
+        if (sender.balance < amount) {
+            throw new Error('Insufficient funds');
+        }
+
+        sender.balance -= amount;
+        receiver.balance += amount;
+
+        await sender.save({ transaction });
+        await receiver.save({ transaction });
+
+        await transaction.commit();
+        console.log('Transaction successful');
+    } catch (error) {
+        await transaction.rollback();
+        console.error('Transaction failed:', error);
+    }
+}
+
+sequelize.sync().then(() => {
+    transferFunds(1, 2, 50);
+});
+```
+
+---
+
+### 53. **Using `pm2` for Process Management**
+Running and managing Node.js applications with `pm2`, a process manager.
+```bash
+# Install pm2 globally
+npm install pm2 -g
+
+# Start your application with pm2
+pm2 start app.js
+
+# View application status
+pm2 status
+
+# Restart application
+pm2 restart app.js
+
+# View logs
+pm2 logs
+
+# Monitor resource usage
+pm2 monit
+```
+
+---
+
+### 54. **Cross-Origin Resource Sharing (CORS) in Express**
+Enabling CORS in an Express application to allow requests from other domains.
+```javascript
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Enable CORS for all origins
+app.use(cors());
+
+// Specific CORS configuration
+app.use(cors({
+    origin: 'http://example.com',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
+app.get('/', (req, res) => {
+    res.send('CORS-enabled app');
+});
+
+app.listen(3000, () => {
+
+
+    console.log('CORS app running at http://localhost:3000');
+});
+```
+
+---
+
+### 55. **File Upload with `multer` in Express**
+Handling file uploads with `multer` middleware in Express.
+```javascript
+const express = require('express');
+const multer = require('multer');
+const app = express();
+
+// Set up multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded successfully');
+});
+
+app.listen(3000, () => {
+    console.log('File upload server running at http://localhost:3000');
+});
+```
+
+---
+
+Here are more advanced JavaScript and Node.js examples to further expand your toolkit:
+
+---
+
+### 56. **Implementing JWT Authentication**
+Using JSON Web Tokens (JWT) for authentication in an Express application.
+```javascript
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const app = express();
+const SECRET_KEY = 'your-secret-key';
+
+app.use(express.json());
+
+// Generate JWT Token
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    
+    // Assume credentials are valid
+    const user = { username };
+    
+    // Generate token
+    const token = jwt.sign(user, SECRET_KEY, { expiresIn: '1h' });
+    res.json({ token });
+});
+
+// Protected Route
+app.get('/protected', (req, res) => {
+    const token = req.headers['authorization'];
+
+    if (!token) return res.status(403).send('Token required');
+
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) return res.status(403).send('Invalid token');
+        res.json({ message: 'This is protected data', user: decoded });
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 57. **Error Handling Middleware in Express**
+Implementing custom error handling middleware for improved error management in Express.
+```javascript
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// Sample route
+app.get('/', (req, res) => {
+    throw new Error('Something went wrong!');
+});
+
+// Custom error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.message);
+    res.status(500).json({ error: err.message });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 58. **Using `dotenv` for Environment Variables**
+Storing sensitive information in environment variables using `dotenv`.
+```javascript
+// .env file
+// DB_URI=mongodb://localhost:27017/mydb
+// SECRET_KEY=your-secret-key
+
+const express = require('express');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const app = express();
+
+// Accessing environment variables
+const dbURI = process.env.DB_URI;
+const secretKey = process.env.SECRET_KEY;
+
+app.get('/', (req, res) => {
+    res.json({ dbURI, secretKey });
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 59. **File Streaming with `fs.createReadStream`**
+Stream files efficiently from the filesystem with `fs.createReadStream`.
+```javascript
+const fs = require('fs');
+const http = require('http');
+
+http.createServer((req, res) => {
+    const filePath = 'large-file.txt';
+    const fileStream = fs.createReadStream(filePath);
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    fileStream.pipe(res); // Stream file directly to the response
+
+    fileStream.on('end', () => {
+        console.log('File streaming completed');
+    });
+
+}).listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
+```
+
+---
+
+### 60. **Async/Await with Error Handling**
+Using `async/await` with proper error handling using `try/catch` blocks.
+```javascript
+const axios = require('axios');
+
+async function fetchData() {
+    try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+        console.log('Data:', response.data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+fetchData();
+```
+
+---
+
+### 61. **WebSocket with `socket.io`**
+Setting up a WebSocket server with `socket.io` for real-time communication.
+```javascript
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+
+    // Listen for message from client
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg); // Broadcast the message to all clients
+    });
+});
+
+app.get('/', (req, res) => {
+    res.send('<h1>WebSocket Server</h1>');
+});
+
+server.listen(3000, () => {
+    console.log('WebSocket server running at http://localhost:3000');
+});
+```
+
+---
+
+### 62. **Building a Simple To-Do List with Express and MongoDB**
+A simple CRUD to-do list application using Express and MongoDB.
+```javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/todolist', { useNewUrlParser: true, useUnifiedTopology: true });
+
+// To-Do Schema and Model
+const Todo = mongoose.model('Todo', {
+    text: String,
+    completed: { type: Boolean, default: false }
+});
+
+// Create a new to-do item
+app.post('/todos', async (req, res) => {
+    const todo = new Todo({
+        text: req.body.text
+    });
+    await todo.save();
+    res.status(201).json(todo);
+});
+
+// Get all to-do items
+app.get('/todos', async (req, res) => {
+    const todos = await Todo.find();
+    res.json(todos);
+});
+
+// Update a to-do item
+app.put('/todos/:id', async (req, res) => {
+    const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(todo);
+});
+
+// Delete a to-do item
+app.delete('/todos/:id', async (req, res) => {
+    await Todo.findByIdAndDelete(req.params.id);
+    res.status(204).send();
+});
+
+app.listen(3000, () => {
+    console.log('To-Do List API running on http://localhost:3000');
+});
+```
+
+---
+
+### 63. **Creating an Express Rate Limiter with `express-rate-limit`**
+Preventing brute-force attacks by limiting the number of requests with `express-rate-limit`.
+```javascript
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+const app = express();
+
+// Create a rate limiter
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.'
+});
+
+// Apply rate limiter to all routes
+app.use(limiter);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the API');
+});
+
+app.listen(3000, () => {
+    console.log('Rate-limited app running on http://localhost:3000');
+});
+```
+
+---
+
+### 64. **Multi-Part Form Data Upload with `formidable`**
+Handling multi-part form data (like file uploads) using `formidable`.
+```javascript
+const express = require('express');
+const formidable = require('formidable');
+const app = express();
+
+app.post('/upload', (req, res) => {
+    const form = new formidable.IncomingForm();
+
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            res.status(500).send('Error processing form data');
+            return;
+        }
+
+        res.json({ fields, files });
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Formidable upload server running on http://localhost:3000');
+});
+```
+
+---
+
+### 65. **Creating a Basic Authentication System**
+Implementing basic authentication with middleware in Express.
+```javascript
+const express = require('express');
+const app = express();
+
+// Basic authentication middleware
+const basicAuth = (req, res, next) => {
+    const auth = req.headers.authorization;
+    if (!auth || auth !== 'Basic YWRtaW46YWRtaW4=') {  // base64 for 'admin:admin'
+        return res.status(401).send('Authentication required');
+    }
+    next();
+};
+
+// Use basic authentication middleware
+app.use(basicAuth);
+
+app.get('/', (req, res) => {
+    res.send('You are authenticated');
+});
+
+app.listen(3000, () => {
+    console.log('Basic authentication app running on http://localhost:3000');
+});
+```
+
+---
+
+### 66. **Using `uuid` for Unique Identifiers**
+Generating unique IDs using `uuid` in Node.js.
+```javascript
+const { v4: uuidv4 } = require('uuid');
+
+const uniqueID = uuidv4();
+console.log('Generated Unique ID:', uniqueID);
+```
+
+---
+
+### 67. **Creating a Background Worker Using `node-cron`**
+Scheduling background tasks with `node-cron` to run periodically.
+```javascript
+const cron = require('node-cron');
+
+// Run a task every minute
+cron.schedule('* * * * *', () => {
+    console.log('Task is running every minute');
+});
+```
+
+---
+
+### 68. **Building a Simple GraphQL API with Apollo Server**
+Creating a simple GraphQL API with Apollo Server.
+```javascript
+const { ApolloServer, gql } = require('apollo-server');
+
+// Define GraphQL schema
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+// Define resolvers
+const resolvers = {
+  Query: {
+   
+
+ hello: () => 'Hello, World!'
+  }
+};
+
+// Create Apollo Server
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+  console.log(`Server ready at ${url}`);
+});
+```
+
+---
